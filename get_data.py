@@ -153,4 +153,3 @@ if __name__ == "__main__":
         links_df.to_csv(links_df_path, index=False)
     else:
         links_df = pd.read_csv(links_df_path, parse_dates=['Date'], infer_datetime_format=True)
-
