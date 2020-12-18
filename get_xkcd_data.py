@@ -84,10 +84,10 @@ def gather_all_links():
 def get_paragraphs_below_header(soup, header_text):
     """Collect the paragraphs directly underneath a header."""
     # regex to match headers 1-6
-    header = re.compile('^h[1-6]$')
+    header = re.compile('^h[1-2]$')
     # We need to use a lambda here because we are checking the contents of the header which is within a span
     # nested inside the header
-    header_tag = soup.find(lambda tag: header.match(tag.name) and header_text in tag.get_text())
+    header_tag = soup.find(lambda tag: header.match(tag.name) and re.match(header_text, tag.get_text()))
     # This page does not have a Transcript section
     # https://www.explainxkcd.com/wiki/index.php/1116:_Traffic_Lights
     body_contents = ''
@@ -108,11 +108,11 @@ def process_page_contents(page_response):
     """Get the explanation and transcript of an xkcd explanation page."""
     page_soup = BeautifulSoup(page_response.content, features="html.parser")
     try:
-        explanation = get_paragraphs_below_header(page_soup, 'Explanation')
-        transcript = get_paragraphs_below_header(page_soup, 'Transcript')
+        explanation = get_paragraphs_below_header(page_soup, r'Explanations?')
+        transcript = get_paragraphs_below_header(page_soup, r'Transcript')
     except AttributeError:
         print(page_response.url)
-        raise Exception("Fuck this shit")
+        raise Exception("It's borked")
 
     return page_response.url, explanation, transcript
 
@@ -143,7 +143,7 @@ def get_all_page_contents(links_list):
 
 
 if __name__ == "__main__":
-    fetch_links = True
+    fetch_links = False
     fetch_pages = False
     links_df_path = DATA_PATH / 'links_df.csv'
     pages_df_path = DATA_PATH / 'pages_df.csv'
@@ -153,3 +153,10 @@ if __name__ == "__main__":
         links_df.to_csv(links_df_path, index=False)
     else:
         links_df = pd.read_csv(links_df_path, parse_dates=['Date'], infer_datetime_format=True)
+
+    if fetch_pages or not pages_df_path.exists():
+        exp_links = links_df["Title"].tolist()
+        pages_df = get_all_page_contents(exp_links)
+        pages_df.to_csv(pages_df_path, index=False)
+    else:
+        pages_df = pd.read_csv(pages_df_path)
