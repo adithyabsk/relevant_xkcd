@@ -1,5 +1,7 @@
-bs4
-requests
-pandas
-yarl
-tqdm
+bs4==0.0.1 # this is to keep PyCharm happy
+beautifulsoup4==4.9.3
+requests==2.25.0
+pandas==1.1.4
+yarl==1.6.3
+tqdm==4.53.0
+google-cloud-bigquery[bqstorage,pandas]==2.6.1

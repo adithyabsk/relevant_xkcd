@@ -2,6 +2,19 @@
 
 Inspiration: https://twitter.com/adithya_balaji/status/1330287375327563781?s=20
 
+## Instructions
+
+Tested on python 3.8
+
+- Setup virtualenv / install requirements
+- Run `get_xkcd_data.py`
+- [Setup GoogleCloudAPI Credentials](https://cloud.google.com/bigquery/docs/reference/libraries#setting_up_authentication)
+- Add credentials to `~/.config/gcloud_creds.json`
+- Run `get_reddit_data.py`
+
+    - NOTE: run this at your own risk (it should fall under the free tier, but no
+      guarantees)
+
 ## Plan
 
 - [x] Get Data

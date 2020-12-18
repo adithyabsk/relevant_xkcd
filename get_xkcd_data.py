@@ -17,7 +17,7 @@ from tqdm import tqdm
 BASE_URL = URL("https://www.explainxkcd.com")
 COMICS_500 = URL("https://www.explainxkcd.com/wiki/index.php/List_of_all_comics_(1-500)")
 COMICS_ALL = URL("https://www.explainxkcd.com/wiki/index.php/List_of_all_comics_(full)")
-DATA_PATH = Path(__file__).parent / 'data'
+DATA_PATH = Path(__file__).parent / 'data' / 'xkcd'
 ENABLE_TQDM = True
 
 
