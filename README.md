@@ -2,6 +2,12 @@
 
 Inspiration: https://twitter.com/adithya_balaji/status/1330287375327563781?s=20
 
+## Installation
+
+```shell
+pip install -r requirements.txt
+```
+
 ## Instructions
 
 Tested on python 3.8

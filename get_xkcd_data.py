@@ -77,6 +77,8 @@ def gather_all_links():
         inplace=True,
         key=lambda series: series.apply(lambda x: int(x.path[1:]))
     )
+    # Convert all dtypes to string
+    all_links = all_links.astype('string')
 
     return all_links
 
@@ -145,18 +147,20 @@ def get_all_page_contents(links_list):
 if __name__ == "__main__":
     fetch_links = False
     fetch_pages = False
-    links_df_path = DATA_PATH / 'links_df.csv'
-    pages_df_path = DATA_PATH / 'pages_df.csv'
+    # Notes: I ended up using parquet because hdf5 does not play nice with the "string" dtype and
+    #        dask processing of csv does not play well with multiline strings
+    links_df_path = DATA_PATH / 'links_df.parquet'
+    pages_df_path = DATA_PATH / 'pages_df.parquet'
 
     if fetch_links or not links_df_path.exists():
         links_df = gather_all_links()
-        links_df.to_csv(links_df_path, index=False)
+        links_df.to_parquet(links_df_path)
     else:
-        links_df = pd.read_csv(links_df_path, parse_dates=['Date'], infer_datetime_format=True)
+        links_df = pd.read_parquet(links_df_path)
 
     if fetch_pages or not pages_df_path.exists():
         exp_links = links_df["Title"].tolist()
         pages_df = get_all_page_contents(exp_links)
-        pages_df.to_csv(pages_df_path, index=False)
+        pages_df.to_parquet(pages_df_path, index=True)
     else:
-        pages_df = pd.read_csv(pages_df_path)
+        pages_df = pd.read_parquet(pages_df_path, index=True)

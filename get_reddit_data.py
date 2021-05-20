@@ -42,9 +42,9 @@ def get_reddit_comments_table():
         *[f"{year}_{month:02d}" for year in range(2015, 2020) for month in range(1, 13)]
     ]
     for table_name in tqdm(table_names):
-        tqdm.write(f"{table_name}")
+        # tqdm.write(f"{table_name}")
         df = client.query(QUERY_STRING.format(table_name=table_name)).result().to_dataframe(bqstorage_client=storage_client)
-        df.to_csv(DATA_PATH / f"{table_name}.csv", index=False)
+        df.to_parquet(DATA_PATH / f"{table_name}.parquet")
 
 
 if __name__ == "__main__":
